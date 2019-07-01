@@ -24,7 +24,20 @@ namespace Cerberus.Core.BL
         {
             using (IDbConnection connecton = new MySqlConnection(CerberusConstant.ConnectionString))
             {
-                return connecton.Query<Person>("SELECT * FROM person").ToList();
+                return connecton.Query<Person>("SELECT id, wechat_id WechatId, name, gender, birthday FROM person").ToList();
+            }
+        }
+
+        /// <summary>
+        /// 根据ID查询用户
+        /// </summary>
+        /// <param name="id">用户ID</param>
+        /// <returns></returns>
+        public Person FindById(string id)
+        {
+            using (IDbConnection connecton = new MySqlConnection(CerberusConstant.ConnectionString))
+            {
+                return connecton.Query<Person>("SELECT id, wechat_id WechatId, name, gender, birthday FROM person WHERE id = @Id", new { Id = id }).FirstOrDefault();
             }
         }
         #endregion //Method

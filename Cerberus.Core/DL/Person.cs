@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Dapper;
 
 namespace Cerberus.Core.DL
 {
@@ -10,7 +11,7 @@ namespace Cerberus.Core.DL
     public class Person
     {
         public string Id { get; set; }
-
+        
         public string WechatId { get; set; }
 
         public string Name { get; set; }

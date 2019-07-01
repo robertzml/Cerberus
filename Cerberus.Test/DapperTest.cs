@@ -1,7 +1,9 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Data;
+using Cerberus.Core.BL;
+using Cerberus.Core.DL;
 using Dapper;
-using Cerberus.Core.Entity;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace Cerberus.Test
 {
@@ -15,16 +17,26 @@ namespace Cerberus.Test
         public void TestInsert()
         {
             Person person = new Person();
+
+            person.Id = System.Guid.NewGuid().ToString();
             person.WechatId = "123";
             person.Name = "test";
             person.Gender = 1;
             person.Birthday = new System.DateTime(2011, 10, 5, 8, 0, 0);
-                        
-            //using (IDbConnection connection = new SqlConnection(connectionString))
-            //{
-            //    int result = connection.Execute("insert into Person(Name,Remark) values(@Name,@Remark)", person);
-            //    Assert.Equals(result, 1);
-            //}
+
+            PersonBusiness personBusiness = new PersonBusiness();
+
+            var result =  personBusiness.Create(person);
+            Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void TestFind()
+        {
+            PersonBusiness personBusiness = new PersonBusiness();
+            var data = personBusiness.FindAll();
+
+            Assert.AreEqual(1, data.Count);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Cerberus.Core.BL
         {
             using (IDbConnection connecton = new MySqlConnection(CerberusConstant.ConnectionString))
             {
-                return connecton.Query<Person>("SELECT id, wechat_id WechatId, name, gender, birthday FROM person").ToList();
+                return connecton.Query<Person>("SELECT id, wechat_id WechatId, name, gender, birthday, horoscope FROM person").ToList();
             }
         }
 
@@ -37,7 +37,24 @@ namespace Cerberus.Core.BL
         {
             using (IDbConnection connecton = new MySqlConnection(CerberusConstant.ConnectionString))
             {
-                return connecton.Query<Person>("SELECT id, wechat_id WechatId, name, gender, birthday FROM person WHERE id = @Id", new { Id = id }).FirstOrDefault();
+                return connecton.Query<Person>(
+                    "SELECT id, wechat_id WechatId, name, gender, birthday, horoscope FROM person WHERE id = @Id",
+                    new { Id = id }).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// 根据八字查找用户
+        /// </summary>
+        /// <param name="horoscope">八字</param>
+        /// <returns></returns>
+        public List<Person> FindByHoroscope(string horoscope)
+        {
+            using (IDbConnection connecton = new MySqlConnection(CerberusConstant.ConnectionString))
+            {
+                return connecton.Query<Person>(
+                    "SELECT id, wechat_id WechatId, name, gender, birthday, horoscope FROM person WHERE horoscope = @horoscope",
+                    new { Horoscope = horoscope }).ToList();
             }
         }
         #endregion //Method
@@ -52,9 +69,9 @@ namespace Cerberus.Core.BL
         {
             using (IDbConnection connection = new MySqlConnection(CerberusConstant.ConnectionString))
             {
-                int result = connection.Execute("INSERT INTO person(id, wechat_id,name,gender,birthday) VALUES(@Id, @WechatId, @Name, @Gender, @Birthday)", person);
+                int result = connection.Execute("INSERT INTO person(id, wechat_id,name,gender,birthday, horoscope) VALUES(@Id, @WechatId, @Name, @Gender, @Birthday, @Horoscope)", person);
                 return result == 1;
-            }            
+            }
         }
         #endregion //CRUD
     }

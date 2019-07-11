@@ -19,5 +19,10 @@ namespace Cerberus.Core.DL
         public short Gender { get; set; }
 
         public DateTime Birthday { get; set; }
+
+        /// <summary>
+        /// 八字
+        /// </summary>
+        public string Horoscope { get; set; }
     }
 }

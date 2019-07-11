@@ -37,6 +37,23 @@ namespace Cerberus.Core.Utility
         private static readonly string[] _terrestrialBranch = { "子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥" };
         private static readonly string[] _chineseZodiac = { "鼠", "牛", "虎", "免", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪" };
 
+        // 时柱对照表  
+        // 甲己   乙庚   丙辛   丁壬   戊癸
+        private static readonly string[][] eraHourTable = new string[12][] {
+            new string[] {"甲子","丙子","戊子","庚子","壬子"},
+            new string[] {"乙丑","丁丑","己丑","辛丑","癸丑"},
+            new string[] {"丙寅","戊寅","庚寅","壬寅","甲寅"},
+            new string[] {"丁卯","己卯","辛卯","癸卯","乙卯"},
+            new string[] {"戊辰","庚辰","壬辰","甲辰","丙辰"},
+            new string[] {"己巳","辛巳","癸巳","己巳","丁巳"},
+            new string[] {"庚午","壬午","甲午","丙午","戊午"},
+            new string[] {"辛未","癸未","乙未","丁未","己未"},
+            new string[] {"壬申","甲申","丙申","戊申","庚申"},
+            new string[] {"癸酉","乙酉","丁酉","己酉","辛酉"},
+            new string[] {"甲戌","丙戌","戊戌","庚戌","壬戌"},
+            new string[] {"乙亥","丁亥","己亥","辛亥","癸亥"}
+        };
+
         private static readonly string[] _solarTerm =
         {
             "小寒", "大寒", "立春", "雨水", "惊蛰", "春分",
@@ -153,9 +170,9 @@ namespace Cerberus.Core.Utility
         #endregion //Function
 
         #region Function Era
-        //年采用的头尾法，月采用的是节令法，主流日历基本上都这种结合，如百度的日历  
-
-        private string GetEraYear()
+        //获取年柱
+        //年采用的头尾法，月采用的是节令法，主流日历基本上都这种结合，如百度的日历
+        public string GetEraYear()
         {
             var sexagenaryYear = _chineseDateTime.GetSexagenaryYear(_dateTime);
             var stemIndex = _chineseDateTime.GetCelestialStem(sexagenaryYear) - 1;
@@ -163,7 +180,11 @@ namespace Cerberus.Core.Utility
             return $"{_celestialStem[stemIndex]}{_terrestrialBranch[branchIndex]}";
         }
 
-        private string GetEraMonth()
+        /// <summary>
+        /// 获取月柱
+        /// </summary>
+        /// <returns></returns>
+        public string GetEraMonth()
         {
             var solarIndex = SolarTermFunc((x, y) => x <= y, out var dt);
             solarIndex = solarIndex == -1 ? 23 : solarIndex;
@@ -216,7 +237,11 @@ namespace Cerberus.Core.Utility
             return $"{_celestialStem[stemIndex]}{_terrestrialBranch[branchIndex]}";
         }
 
-        private string GetEraDay()
+        /// <summary>
+        /// 获取日柱
+        /// </summary>
+        /// <returns></returns>
+        public string GetEraDay()
         {
             var ts = _dateTime - new DateTime(1901, 2, 15);
             var offset = ts.Days;
@@ -224,11 +249,30 @@ namespace Cerberus.Core.Utility
             return $"{_celestialStem[sexagenaryDay % 10]}{_terrestrialBranch[sexagenaryDay % 12]}";
         }
 
-        private string GetEraHour()
+        /// <summary>
+        /// 获取时柱
+        /// </summary>
+        /// <param name="showShi">是否显示时柱</param>
+        /// <returns></returns>
+        public string GetEraHour(bool showShi = true)
         {
-            var hourIndex = (int)Math.Floor((_dateTime.Hour + 1) / (decimal)2);
-            hourIndex = hourIndex == 12 ? 0 : hourIndex;
-            return _terrestrialBranch[hourIndex];
+            if (showShi)
+            {
+                var ts = _dateTime - new DateTime(1901, 2, 15);
+                var offset = ts.Days;
+                var sexagenaryDay = offset % 60;
+
+                var dayIndex = sexagenaryDay % 10;
+                var hourIndex = (_dateTime.Hour + 1) / 2;
+
+                return eraHourTable[hourIndex][dayIndex];
+            }
+            else
+            {
+                var hourIndex = (int)Math.Floor((_dateTime.Hour + 1) / (decimal)2);
+                hourIndex = hourIndex == 12 ? 0 : hourIndex;
+                return _terrestrialBranch[hourIndex];
+            }
         }
 
         private string GetEraMinute()
@@ -389,10 +433,13 @@ namespace Cerberus.Core.Utility
         #endregion //Display Chinese
 
         #region Display Era
-
+        /// <summary>
+        /// 显示农历
+        /// </summary>
+        /// <returns></returns>
         public string ToChineseEraString()
         {
-            return ToChineseEraString("yMdHm");
+            return ToChineseEraString("yMdH");
         }
 
         public string ToChineseEraString(string format)

@@ -1,6 +1,5 @@
 using Cerberus.Core.BL;
 using Cerberus.Core.DL;
-using Dapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
 
@@ -9,7 +8,7 @@ namespace Cerberus.Test
     [TestClass]
     public class DapperTest
     {
-        private string connectionString = "Server=localhost;Database=tmr;User=root;Password=123456;CharSet=utf8mb4;Allow Zero Datetime=True;";
+        //private string connectionString = "Server=localhost;Database=tmr;User=root;Password=123456;CharSet=utf8mb4;Allow Zero Datetime=True;";
 
 
         //[TestMethod]

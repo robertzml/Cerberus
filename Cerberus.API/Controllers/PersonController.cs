@@ -15,12 +15,18 @@ namespace Cerberus.API.Controllers
     public class PersonController : ControllerBase
     {
         #region Action
-        [HttpGet("{id}")]
-        public ActionResult<Person> Get(string id)
+        public ActionResult<List<Person>> Get()
+        {
+            PersonBusiness personBusiness = new PersonBusiness();
+            return personBusiness.FindAll();
+        }
+
+        [HttpGet("{wechatid}")]
+        public ActionResult<Person> Get(string wechatid)
         {
             PersonBusiness personBusiness = new PersonBusiness();
 
-            return personBusiness.FindById(id);
+            return personBusiness.FindByWechatId(wechatid);
         }
 
         [HttpPost]

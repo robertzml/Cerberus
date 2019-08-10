@@ -40,7 +40,7 @@ namespace Cerberus.Test
         [TestMethod]
         public void TestChinese()
         {
-            DateTime dt = new DateTime(1987, 6, 17, 5, 0, 0);
+            DateTime dt = new DateTime(2010, 4, 2, 10, 0, 0);
             ChineseDateTime cdt = new ChineseDateTime(dt);
             //Console.WriteLine(cdt.ToShortDateString());
 

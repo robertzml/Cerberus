@@ -262,7 +262,7 @@ namespace Cerberus.Core.Utility
                 var offset = ts.Days;
                 var sexagenaryDay = offset % 60;
 
-                var dayIndex = sexagenaryDay % 10;
+                var dayIndex = sexagenaryDay % 5;
                 var hourIndex = (_dateTime.Hour + 1) / 2;
 
                 return eraHourTable[hourIndex][dayIndex];

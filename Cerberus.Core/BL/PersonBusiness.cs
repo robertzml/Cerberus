@@ -6,15 +6,39 @@ using System.Linq;
 
 namespace Cerberus.Core.BL
 {
-    using Dapper;
-    using MySql.Data.MySqlClient;
+    using SqlSugar;
     using Cerberus.Core.DL;
+    using Cerberus.Core.Utility;
 
     /// <summary>
     /// 用户业务类
     /// </summary>
     public class PersonBusiness
     {
+        #region Function
+        /// <summary>
+        /// Create SqlSugarClient
+        /// </summary>
+        /// <returns></returns>
+        private SqlSugarClient GetInstance()
+        {
+            SqlSugarClient db = new SqlSugarClient(new ConnectionConfig()
+            {
+                ConnectionString = "Server=localhost;Database=tmr;User=root;Password=123456;CharSet=utf8mb4;Allow Zero Datetime=True;",
+                DbType = DbType.MySql,
+                IsAutoCloseConnection = true,
+                InitKeyType = InitKeyType.Attribute
+            });
+            //Print sql
+            //db.Aop.OnLogExecuting = (sql, pars) =>
+            //{
+            //    Console.WriteLine(sql + "\r\n" + db.Utilities.SerializeObject(pars.ToDictionary(it => it.ParameterName, it => it.Value)));
+            //    Console.WriteLine();
+            //};
+            return db;
+        }
+        #endregion //Function
+
         #region Method
         /// <summary>
         /// 查询所有用户
@@ -22,25 +46,20 @@ namespace Cerberus.Core.BL
         /// <returns></returns>
         public List<Person> FindAll()
         {
-            using (IDbConnection connecton = new MySqlConnection(CerberusConstant.ConnectionString))
-            {
-                return connecton.Query<Person>("SELECT id, wechat_id WechatId, name, gender, birthday, horoscope FROM person").ToList();
-            }
+            var db = GetInstance();
+            return db.Queryable<Person>().ToList();
         }
 
         /// <summary>
-        /// 根据ID查询用户
+        /// 根据微信ID查询用户
         /// </summary>
-        /// <param name="id">用户ID</param>
+        /// <param name="wechatId">微信ID</param>
         /// <returns></returns>
-        public Person FindById(string id)
+        public Person FindByWechatId(string wechatId)
         {
-            using (IDbConnection connecton = new MySqlConnection(CerberusConstant.ConnectionString))
-            {
-                return connecton.Query<Person>(
-                    "SELECT id, wechat_id WechatId, name, gender, birthday, horoscope FROM person WHERE id = @Id",
-                    new { Id = id }).FirstOrDefault();
-            }
+            var db = GetInstance();
+            var data = db.Queryable<Person>().Where(r => r.WechatId == wechatId).First();
+            return data;
         }
 
         /// <summary>
@@ -48,15 +67,15 @@ namespace Cerberus.Core.BL
         /// </summary>
         /// <param name="horoscope">八字</param>
         /// <returns></returns>
-        public List<Person> FindByHoroscope(string horoscope)
-        {
-            using (IDbConnection connecton = new MySqlConnection(CerberusConstant.ConnectionString))
-            {
-                return connecton.Query<Person>(
-                    "SELECT id, wechat_id WechatId, name, gender, birthday, horoscope FROM person WHERE horoscope = @horoscope",
-                    new { Horoscope = horoscope }).ToList();
-            }
-        }
+        //public List<Person> FindByHoroscope(string horoscope)
+        //{
+        //    using (IDbConnection connecton = new MySqlConnection(CerberusConstant.ConnectionString))
+        //    {
+        //        return connecton.Query<Person>(
+        //            "SELECT id, wechat_id WechatId, name, gender, birthday, horoscope FROM person WHERE horoscope = @horoscope",
+        //            new { Horoscope = horoscope }).ToList();
+        //    }
+        //}
         #endregion //Method
 
         #region CRUD
@@ -67,11 +86,12 @@ namespace Cerberus.Core.BL
         /// <returns></returns>
         public bool Create(Person person)
         {
-            using (IDbConnection connection = new MySqlConnection(CerberusConstant.ConnectionString))
-            {
-                int result = connection.Execute("INSERT INTO person(id, wechat_id,name,gender,birthday, horoscope) VALUES(@Id, @WechatId, @Name, @Gender, @Birthday, @Horoscope)", person);
-                return result == 1;
-            }
+            ChineseDateTime cdt = new ChineseDateTime(person.Birthday);
+            person.Horoscope = cdt.ToChineseEraString();
+
+            var db = GetInstance();
+            var result = db.Insertable(person).ExecuteCommand();
+            return result == 1;
         }
         #endregion //CRUD
     }

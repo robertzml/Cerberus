@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace Cerberus.API.Controllers
 {
@@ -16,12 +17,37 @@ namespace Cerberus.API.Controllers
     public class PersonController : ControllerBase
     {
         #region Action
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpGet("{code}")]
+        public string Login(string code)
+        {            
+            using (HttpClient client = new HttpClient())
+            {
+                string url = "";
+                HttpResponseMessage response = client.GetAsync(url).Result;
+                return response.Content.ReadAsStringAsync().Result;
+            }            
+        }
+
+        /// <summary>
+        /// 获取所有用户
+        /// </summary>
+        /// <returns></returns>
         public ActionResult<List<Person>> List()
         {
             PersonBusiness personBusiness = new PersonBusiness();
             return personBusiness.FindAll();
         }
 
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="wechatid"></param>
+        /// <returns></returns>
         [HttpGet("{wechatid}")]
         public ActionResult<Person> Get(string wechatid)
         {

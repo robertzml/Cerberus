@@ -50,5 +50,22 @@ namespace Cerberus.Test
 
             Assert.AreEqual(1, result);
         }
+
+        [TestMethod]
+        public void TestGroup()
+        {
+            var db = GetInstance();
+
+            var result = db.Queryable<Person>()
+                .GroupBy(r => new { r.Horoscope })
+                .Having(t => SqlFunc.AggregateCount(t.Id) > 1)
+                .Select(s => new { s.Horoscope, count = SqlFunc.AggregateCount(s.Id) }).ToList();
+
+            foreach (var item in result)
+            {
+                Console.WriteLine(item);
+            }
+            //Assert.AreEqual(3, Convert.ToInt32(result));//
+        }
     }
 }

@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Cerberus.Core\Cerberus.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="img\" />
+  </ItemGroup>
+
 </Project>

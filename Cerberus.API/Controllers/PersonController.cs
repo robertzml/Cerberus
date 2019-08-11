@@ -9,13 +9,14 @@ namespace Cerberus.API.Controllers
 {
     using Cerberus.Core.BL;
     using Cerberus.Core.DL;
+    using Cerberus.API.Utility;
 
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class PersonController : ControllerBase
     {
         #region Action
-        public ActionResult<List<Person>> Get()
+        public ActionResult<List<Person>> List()
         {
             PersonBusiness personBusiness = new PersonBusiness();
             return personBusiness.FindAll();
@@ -30,15 +31,26 @@ namespace Cerberus.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Person> Post(Person person)
+        public ActionResult<ResponseData> Create(Person person)
         {
             PersonBusiness personBusiness = new PersonBusiness();
+
+            if (string.IsNullOrEmpty(person.WechatId))
+            {
+                return new ResponseData { ErrorCode = 1, ErrorMessage = "微信ID为空" };
+            }
+
+            var exist = personBusiness.FindByWechatId(person.WechatId);
+            if (exist != null)
+            {
+                return new ResponseData { ErrorCode = 2, ErrorMessage = "用户已提交" };
+            }
 
             person.Id = Guid.NewGuid().ToString();
             var result = personBusiness.Create(person);
 
             if (result)
-                return CreatedAtAction(nameof(Get), new { id = person.Id }, person);
+                return new ResponseData { ErrorCode = 0, ErrorMessage = "提交成功" };
             else
                 return BadRequest();
         }

@@ -21,10 +21,16 @@ namespace Cerberus.Core.DL
         public string WechatId { get; set; }
 
         /// <summary>
+        /// 微信号
+        /// </summary>
+        [SugarColumn(ColumnName = "wechat_number")]
+        public string WechatNumber { get; set; }
+
+        /// <summary>
         /// 姓名
         /// </summary>
         [SugarColumn(ColumnName = "name")]
-        public string Name { get; set; }
+        public string Name { get; set; }               
 
         /// <summary>
         /// 昵称

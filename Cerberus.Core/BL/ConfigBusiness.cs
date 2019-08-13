@@ -59,6 +59,7 @@ namespace Cerberus.Core.BL
             data.ShowTotalUsers = config.ShowTotalUsers;
             data.ShowAlreadyFound = config.ShowAlreadyFound;
             data.ShowFortuneBuddy = config.ShowFortuneBuddy;
+            data.IfWeixinNeed = config.IfWeixinNeed;
 
             return data;
         }

@@ -16,5 +16,8 @@ namespace Cerberus.Core.DL
 
         [SugarColumn(ColumnName = "show_fortune_buddy")]
         public bool ShowFortuneBuddy { get; set; }
+
+        [SugarColumn(ColumnName = "if_weixin_need")]
+        public bool IfWeixinNeed { get; set; }
     }
 }

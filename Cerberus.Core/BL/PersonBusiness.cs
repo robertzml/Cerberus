@@ -60,6 +60,7 @@ namespace Cerberus.Core.BL
         {
             var db = GetInstance();
             var data = db.Queryable<Person>().Where(r => r.WechatId == wechatId).First();
+          
             return data;
         }
 
@@ -68,15 +69,11 @@ namespace Cerberus.Core.BL
         /// </summary>
         /// <param name="horoscope">八字</param>
         /// <returns></returns>
-        //public List<Person> FindByHoroscope(string horoscope)
-        //{
-        //    using (IDbConnection connecton = new MySqlConnection(CerberusConstant.ConnectionString))
-        //    {
-        //        return connecton.Query<Person>(
-        //            "SELECT id, wechat_id WechatId, name, gender, birthday, horoscope FROM person WHERE horoscope = @horoscope",
-        //            new { Horoscope = horoscope }).ToList();
-        //    }
-        //}
+        public int FindByHoroscope(string horoscope)
+        {
+            var db = GetInstance();
+            return db.Queryable<Person>().Where(r => r.Horoscope == horoscope).Count();
+        }
         #endregion //Method
 
         #region CRUD

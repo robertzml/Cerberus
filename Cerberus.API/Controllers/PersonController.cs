@@ -80,6 +80,24 @@ namespace Cerberus.API.Controllers
             else
                 return BadRequest();
         }
+
+        [HttpPost]
+        public ActionResult<ResponseData> Update(Person person)
+        {
+            PersonBusiness personBusiness = new PersonBusiness();
+
+            if (string.IsNullOrEmpty(person.WechatId))
+            {
+                return new ResponseData { ErrorCode = 1, ErrorMessage = "微信ID为空" };
+            }
+
+            var result = personBusiness.Update(person);
+
+            if (result)
+                return new ResponseData { ErrorCode = 0, ErrorMessage = "提交成功" };
+            else
+                return new ResponseData { ErrorCode = 3, ErrorMessage = "修改失败" };
+        }
         #endregion //Action
     }
 }

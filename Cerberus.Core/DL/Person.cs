@@ -55,5 +55,11 @@ namespace Cerberus.Core.DL
         /// </summary>
         [SugarColumn(ColumnName = "horoscope")]
         public string Horoscope { get; set; }
+
+        /// <summary>
+        /// 修改次数
+        /// </summary>
+        [SugarColumn(ColumnName = "modify_count")]
+        public int ModifyCount { get; set; }
     }
 }

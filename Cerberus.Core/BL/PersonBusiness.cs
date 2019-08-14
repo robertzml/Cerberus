@@ -86,9 +86,37 @@ namespace Cerberus.Core.BL
         {
             ChineseDateTime cdt = new ChineseDateTime(person.Birthday);
             person.Horoscope = cdt.ToChineseEraString();
+            person.ModifyCount = 0;
 
             var db = GetInstance();
             var result = db.Insertable(person).ExecuteCommand();
+            return result == 1;
+        }
+
+        public bool Update(Person person)
+        {
+            var db = GetInstance();
+
+            Person info = db.Queryable<Person>().Where(r => r.WechatId == person.WechatId).First();
+            if (info == null)
+                return false;
+
+            if (info.ModifyCount >= 3)
+            {
+                return false;
+            }
+
+            ChineseDateTime cdt = new ChineseDateTime(person.Birthday);
+            info.WechatId = person.WechatId;
+            info.WechatNumber = person.WechatNumber;
+            info.Name = person.Name;
+            info.NickName = person.NickName;
+            info.Gender = person.Gender;
+            info.Birthday = person.Birthday;
+            info.Horoscope = cdt.ToChineseEraString();
+            info.ModifyCount += 1;
+                        
+            var result = db.Updateable(info).ExecuteCommand();
             return result == 1;
         }
         #endregion //CRUD

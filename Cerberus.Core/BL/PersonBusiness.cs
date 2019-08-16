@@ -114,7 +114,7 @@ namespace Cerberus.Core.BL
             info.Gender = person.Gender;
             info.Birthday = person.Birthday;
             info.Horoscope = cdt.ToChineseEraString();
-            info.ModifyCount += 1;
+            info.ModifyCount += 1;            
                         
             var result = db.Updateable(info).ExecuteCommand();
             return result == 1;

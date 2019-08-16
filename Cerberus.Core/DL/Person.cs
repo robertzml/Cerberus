@@ -61,5 +61,11 @@ namespace Cerberus.Core.DL
         /// </summary>
         [SugarColumn(ColumnName = "modify_count")]
         public int ModifyCount { get; set; }
+
+        /// <summary>
+        /// 来源
+        /// </summary>
+        [SugarColumn(ColumnName = "source")]
+        public int Source { get; set; }
     }
 }

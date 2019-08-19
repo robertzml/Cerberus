@@ -45,7 +45,7 @@ namespace Cerberus.Core.BL
             }
             else
             {
-                data.AlreadyFound = db.Queryable<Person>().Where(r => r.Horoscope == person.Horoscope).Count();
+                data.AlreadyFound = db.Queryable<Person>().Where(r => r.Horoscope == person.Horoscope && r.WechatId != wechatId).Count();
             }
 
             var fortune = db.Queryable<Person>()

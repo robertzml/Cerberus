@@ -101,7 +101,9 @@ namespace Cerberus.Core.BL
             if (info == null)
                 return false;
 
-            if (info.ModifyCount >= 3)
+            var config = db.Queryable<Config>().First();
+
+            if (info.ModifyCount >= config.ModifyCount)
             {
                 return false;
             }

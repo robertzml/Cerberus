@@ -19,5 +19,8 @@ namespace Cerberus.Core.DL
 
         [SugarColumn(ColumnName = "if_weixin_need")]
         public bool IfWeixinNeed { get; set; }
+
+        [SugarColumn(ColumnName = "modify_count")]
+        public int ModifyCount { get; set; }
     }
 }

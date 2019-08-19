@@ -22,5 +22,7 @@ namespace Cerberus.Core.Utility
         public bool ShowFortuneBuddy { get; set; }
 
         public bool IfWeixinNeed { get; set; }
+
+        public int ModifyCount { get; set; }
     }
 }

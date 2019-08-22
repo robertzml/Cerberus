@@ -475,7 +475,7 @@ namespace Cerberus.Core.Utility
                         break;
                 }
             }
-            var def = $"{year}年{month}月{day}日{hour}时";
+            var def = $"{year}年 {month}月 {day}日 {hour}时";
             var result = date.ToString();
             return string.IsNullOrEmpty(result) ? def : result;
         }

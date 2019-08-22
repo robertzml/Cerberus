@@ -36,7 +36,7 @@ namespace Cerberus.Core.BL
         {
             ConfigData data = new ConfigData();
             var db = GetInstance();
-            data.TotalUsers = db.Queryable<Person>().Count();
+            data.TotalUsers = db.Queryable<Person>().Count() + 85000;
 
             var person = db.Queryable<Person>().Where(r => r.WechatId == wechatId).First();
             if (person == null)
@@ -53,7 +53,7 @@ namespace Cerberus.Core.BL
                 .Having(t => SqlFunc.AggregateCount(t.Id) > 1)
                 .Select(s => new { s.Horoscope, Count = SqlFunc.AggregateCount(s.Id) }).ToList();
 
-            data.FortuneBuddy = fortune.Sum(r => r.Count);
+            data.FortuneBuddy = fortune.Sum(r => r.Count) + 2300;
 
             var config = db.Queryable<Config>().First();
             data.ShowTotalUsers = config.ShowTotalUsers;
